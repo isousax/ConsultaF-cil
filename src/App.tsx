@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/auth/LoginPage';
@@ -13,8 +14,15 @@ import { CodesPage } from './pages/dashboard/CodesPage';
 import { ChangePasswordPage } from './pages/dashboard/ChangePasswordPage';
 import { AboutPage } from './pages/AboutPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { useAuthStore } from './stores/authStore';
 
 function App() {
+  const loadStoredAuth = useAuthStore((state) => state.loadStoredAuth);
+
+  useEffect(() => {
+    loadStoredAuth();
+  }, [loadStoredAuth]);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -22,7 +30,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/email-sent" element={<EmailSentPage />} />
-        <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/confirm-email" element={<VerifyEmailPage />} />
         <Route path="/resend-verification" element={<ResendVerificationPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />

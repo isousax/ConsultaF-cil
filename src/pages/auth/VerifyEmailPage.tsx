@@ -61,7 +61,7 @@ export function VerifyEmailPage() {
   }, [status, countdown, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-green-50 to-blue-50 p-4">
       <Card className="w-full max-w-md p-8">
         <div className="text-center">
           {status === 'loading' && (

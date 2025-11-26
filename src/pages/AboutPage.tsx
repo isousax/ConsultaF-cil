@@ -46,7 +46,7 @@ export const AboutPage = () => {
       </div>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 to-blue-800 py-20 text-white">
+      <div className="bg-linear-to-br from-blue-600 to-blue-800 py-20 text-white">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="mb-6 text-4xl font-bold md:text-5xl">
@@ -111,7 +111,7 @@ export const AboutPage = () => {
             {features.map((feature, index) => (
               <Card key={index}>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
                       <feature.icon className="h-6 w-6 text-blue-600" />
                     </div>
@@ -131,7 +131,7 @@ export const AboutPage = () => {
 
           {/* CTA */}
           <div className="mt-12 text-center">
-            <Card className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+            <Card className="bg-linear-to-r from-blue-600 to-blue-700 text-white">
               <h2 className="mb-4 text-2xl font-bold">
                 Pronto para simplificar sua vida?
               </h2>

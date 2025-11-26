@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export interface AlertProps {
   type?: 'success' | 'error' | 'info' | 'warning';
-  message: string;
+  message: ReactNode;
   onClose?: () => void;
   autoClose?: boolean;
   autoCloseDelay?: number;

@@ -1,17 +1,17 @@
 import { forwardRef } from 'react';
-import type { TextareaHTMLAttributes } from 'react';
+import type { TextareaHTMLAttributes, ReactNode } from 'react';
 import { clsx } from 'clsx';
 
 export interface TextAreaProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?: string;
+  label?: ReactNode;
   error?: string;
-  helperText?: string;
+  helperText?: ReactNode;
 }
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ label, error, helperText, className, id, ...props }, ref) => {
-    const textareaId = id || label?.toLowerCase().replace(/\s+/g, '-');
+    const textareaId = id || (typeof label === 'string' ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
     return (
       <div className="w-full">
