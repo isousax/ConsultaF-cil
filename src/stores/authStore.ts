@@ -105,7 +105,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   logout: async () => {
     set({ isLoading: true });
-    const { refreshToken, autoRefreshTimer } = get();
+    const { refreshToken, token, autoRefreshTimer } = get();
     
     try {
       // Clear auto-refresh timer
@@ -113,9 +113,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         clearTimeout(autoRefreshTimer);
       }
 
-      // Send logout request with refresh_token if available
-      if (refreshToken) {
-        await authService.logout(refreshToken);
+      // Send logout request with both tokens if available
+      if (refreshToken && token) {
+        await authService.logout(refreshToken, token);
       }
 
       // Clear localStorage
