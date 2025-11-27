@@ -87,8 +87,8 @@ export function ChangePasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-gray-50 to-green-50/30 flex items-center justify-center p-4">
-        <Card className="p-8 max-w-md text-center backdrop-blur-sm bg-white/80 border border-white/20 shadow-soft-xl">
+      <div className="space-y-6 p-4 sm:p-6 max-w-md mx-auto">
+        <Card className="text-center bg-white/80 backdrop-blur-sm border border-white/20">
           <div className="w-20 h-20 mx-auto mb-6 bg-linear-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg shadow-green-500/25">
             <CheckCircle className="w-10 h-10 text-white" />
           </div>
@@ -112,31 +112,35 @@ export function ChangePasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-blue-50/30 py-8">
-      <div className="max-w-2xl mx-auto p-4">
-
-        <Card className="p-8 backdrop-blur-sm bg-white/80 border border-white/20 shadow-soft-xl">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 mx-auto mb-4 bg-linear-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25">
-              <Shield className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold bg-linear-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-2">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-6 max-w-3xl mx-auto">
+      {/* Header */}
+      <div>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/25">
+            <Shield className="h-6 w-6" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold bg-linear-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
               Alterar Senha
             </h1>
-            <p className="text-gray-600">
+            <p className="text-sm text-gray-600">
               Proteja sua conta com uma senha forte e única
             </p>
           </div>
+        </div>
+      </div>
 
-          {displayError && (
-            <Alert 
-              type="error" 
-              className="mb-6 animate-in slide-in-from-top duration-500" 
-              message={displayError} 
-            />
-          )}
+      <Card className="bg-white/80 backdrop-blur-sm border border-white/20">
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+        {displayError && (
+          <Alert 
+            type="error" 
+            className="animate-in slide-in-from-top duration-500" 
+            message={displayError} 
+          />
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
             <div className="relative">
               <Input
                 label="Senha Atual"
@@ -290,8 +294,7 @@ export function ChangePasswordPage() {
               </Button>
             </div>
           </form>
-        </Card>
-      </div>
+      </Card>
     </div>
   );
 }

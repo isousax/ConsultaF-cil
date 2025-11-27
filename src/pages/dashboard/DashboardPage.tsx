@@ -52,23 +52,25 @@ export const DashboardPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-8">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <div className="flex items-center gap-3 mb-2">
-              <Smartphone className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Meus Códigos de Consulta
-            </h1>
+      <div>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/25">
+            <Smartphone className="h-6 w-6" />
           </div>
-          <p className="text-sm md:text-base text-gray-600 leading-relaxed">
-            Adicione e acompanhe seus códigos de consulta médica de forma simples e segura
-          </p>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold bg-linear-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              Adicionar Código
+            </h1>
+            <p className="text-sm text-gray-600">
+              Cadastre e monitore seus códigos de consulta
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <div className="space-y-4">
         {/* Alertas */}
         {error && (
           <Alert 
@@ -103,21 +105,12 @@ export const DashboardPage = () => {
         )}
 
         {/* Formulário de código único */}
-        <Card>
-          <div className="flex items-center gap-2 mb-6">
-            <div className="bg-blue-100 p-2 rounded-lg">
-              <Plus className="h-5 w-5 text-blue-600" />
-            </div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              Adicionar código de consulta
-            </h2>
-          </div>
-          
+        <Card className="bg-white/80 backdrop-blur-sm border border-white/20">
           <form onSubmit={handleSingleCodeSubmit} className="space-y-5">
             <Input
               label={
                 <span className="text-base font-medium text-gray-900">
-                  Código numérico *
+                  Código *
                 </span>
               }
               type="text"
@@ -154,7 +147,7 @@ export const DashboardPage = () => {
               isLoading={isAdding}
               disabled={isAdding || !singleCode.trim()}
               size="lg"
-              className="text-lg py-4"
+              className="bg-linear-to-r from-blue-600 to-blue-700 shadow-lg shadow-blue-500/25 text-lg py-4"
             >
               <Plus className="mr-2 h-5 w-5" />
               Adicionar Código
