@@ -7,90 +7,13 @@ import type {
   CodesListParams,
   DeleteCodeResponse,
   UpdateNowResponse,
+  CodeDetailsResponse,
   CodeStatus,
 } from '../types';
-
-// Mock data storage (fallback)
-const MOCK_CODES_KEY = 'consultafacil_mock_codes';
-const USE_MOCK = false; // Set to true to use mock data
-
-// Helper to get mock codes
-const getMockCodes = (): Code[] => {
-  const data = localStorage.getItem(MOCK_CODES_KEY);
-  return data ? JSON.parse(data) : [];
-};
-
-// Helper to save mock codes
-const saveMockCodes = (codes: Code[]): void => {
-  localStorage.setItem(MOCK_CODES_KEY, JSON.stringify(codes));
-};
-
-// Helper to validate code format (numeric only)
-const isValidCode = (code: string): boolean => {
-  return /^\d+$/.test(code.trim());
-};
-
-// Helper to simulate status check
-const generateRandomStatus = (): CodeStatus => {
-  const statuses: CodeStatus[] = ['pending', 'confirmed', 'error', 'not_found'];
-  return statuses[Math.floor(Math.random() * statuses.length)];
-};
 
 export const codesService = {
   // Add codes (single or multiple)
   addCodes: async (data: AddCodeRequest): Promise<AddCodeResponse> => {
-    if (USE_MOCK) {
-      // Mock implementation
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const codes = getMockCodes();
-      const userId = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')!).id
-        : 'unknown';
-
-      const added: Code[] = [];
-      const invalid: string[] = [];
-
-      data.codes.forEach((item) => {
-        const trimmedCode = item.code.trim();
-        const trimmedName = item.name?.trim();
-
-        if (!isValidCode(trimmedCode)) {
-          invalid.push(trimmedCode);
-          return;
-        }
-
-        // Check if code already exists
-        if (codes.some((c) => c.code === trimmedCode && c.userId === userId)) {
-          invalid.push(`${trimmedCode} (já existe)`);
-          return;
-        }
-
-        const newCode: Code = {
-          id: `code_${Date.now()}_${Math.random()}`,
-          code: trimmedCode,
-          name: trimmedName,
-          status: 'pending',
-          lastUpdated: new Date().toISOString(),
-          createdAt: new Date().toISOString(),
-          userId,
-        };
-
-        codes.push(newCode);
-        added.push(newCode);
-      });
-
-      saveMockCodes(codes);
-
-      return {
-        success: true,
-        added,
-        invalid,
-        message: `${added.length} código(s) adicionado(s) com sucesso`,
-      };
-    }
-
-    // Real API implementation
     const response = await codesApiClient.post<AddCodeResponse>('/api/codes', data);
     return response.data;
   },
@@ -142,81 +65,15 @@ export const codesService = {
 
   // Delete a code
   deleteCode: async (codeId: string): Promise<DeleteCodeResponse> => {
-    if (USE_MOCK) {
-      // Mock implementation
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const codes = getMockCodes();
-      const userId = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')!).id
-        : 'unknown';
-
-      const index = codes.findIndex(
-        (c) => c.id === codeId && c.userId === userId
-      );
-
-      if (index === -1) {
-        throw new Error('Código não encontrado');
-      }
-
-      codes.splice(index, 1);
-      saveMockCodes(codes);
-
-      return {
-        success: true,
-        message: 'Código removido com sucesso',
-      };
-    }
-
-    // Real API implementation
     const response = await codesApiClient.delete<DeleteCodeResponse>(`/api/codes/${codeId}`);
     return response.data;
   },
 
-  // Update all codes status now
-  updateNow: async (): Promise<UpdateNowResponse> => {
-    if (USE_MOCK) {
-      // Mock implementation - simulates checking status with backend
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      const codes = getMockCodes();
-      const userId = localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user')!).id
-        : 'unknown';
-
-      const updated: Code[] = [];
-
-      codes.forEach((code) => {
-        if (code.userId === userId) {
-          // Simulate status update
-          code.status = generateRandomStatus();
-          code.lastUpdated = new Date().toISOString();
-          updated.push(code);
-        }
-      });
-
-      saveMockCodes(codes);
-
-      return {
-        success: true,
-        updated,
-        message: `${updated.length} código(s) atualizados`,
-      };
-    }
-
-    // Real API implementation
-    const response = await codesApiClient.post<UpdateNowResponse>('/api/codes/update-now');
+  // List codes with pagination and filter
+  listCodes: async (params: CodesListParams = {}): Promise<CodesListResponse> => {
+    const response = await codesApiClient.get<CodesListResponse>('/api/codes', { params });
     return response.data;
-  },
-
-  // Get single code details
-  getCode: async (codeId: string): Promise<Code> => {
-    await new Promise((resolve) => setTimeout(resolve, 400));
-
-    const codes = getMockCodes();
-    const userId = localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')!).id
-      : 'unknown';
+  },  : 'unknown';
 
     const code = codes.find((c) => c.id === codeId && c.userId === userId);
 
@@ -230,4 +87,21 @@ export const codesService = {
     // const response = await apiClient.get<Code>(`/codes/${codeId}`);
     // return response.data;
   },
-};
+
+  // Get code consultation details
+  getCodeDetails: async (codeId: string): Promise<CodeDetailsResponse> => {
+    if (USE_MOCK) {
+      // Mock implementation
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      return {
+        success: true,
+  // Update all codes status now
+  updateNow: async (): Promise<UpdateNowResponse> => {
+    const response = await codesApiClient.post<UpdateNowResponse>('/api/codes/update-now');
+    return response.data;
+  },  // Get code consultation details
+  getCodeDetails: async (codeId: string): Promise<CodeDetailsResponse> => {
+    const response = await codesApiClient.get<CodeDetailsResponse>(`/api/codes/${codeId}/details`);
+    return response.data;
+  },

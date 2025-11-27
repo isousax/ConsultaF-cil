@@ -196,19 +196,19 @@ export const CodesPage = () => {
               <div className="lg:hidden divide-y divide-gray-200">
                 {filteredCodes.map((code) => (
                   <div key={code.id} className="p-4 hover:bg-blue-50/30 transition-colors">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="flex-1 min-w-0 overflow-hidden">
                         <div className="flex items-center gap-2 mb-1">
                           <div className="w-2 h-2 bg-blue-500 rounded-full shrink-0"></div>
-                          <span className="font-mono font-semibold text-gray-900 text-sm">
+                          <span className="font-mono font-semibold text-gray-900 text-sm break-all">
                             {code.code}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 truncate">
+                        <p className="text-sm text-gray-600 break-words line-clamp-2">
                           {code.name || <span className="italic text-gray-400">Sem descrição</span>}
                         </p>
                       </div>
-                      <Badge status={code.status} />
+                      <Badge status={code.status} className="shrink-0" />
                     </div>
                     <div className="space-y-1.5 text-xs text-gray-500 mb-3">
                       <div className="flex items-center justify-between">

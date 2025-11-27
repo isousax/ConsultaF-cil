@@ -155,7 +155,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.removeItem('token_expires_at');
       localStorage.removeItem('user');
       localStorage.removeItem('remember_me');
-      set({Storage.removeItem('user');
       set({
         user: null,
         token: null,

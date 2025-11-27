@@ -144,6 +144,22 @@ export interface UpdateNowResponse {
   message: string;
 }
 
+export interface CodeDetails {
+  requestDate: string;
+  appointmentDate: string;
+  patientName: string;
+  procedure: string;
+  requestingUnit: string;
+  serviceLocation: string;
+  internalId: string;
+}
+
+export interface CodeDetailsResponse {
+  success: boolean;
+  code: string;
+  details: CodeDetails;
+}
+
 // Error Types (baseado na API)
 export interface ErrorResponse {
   error: string;
