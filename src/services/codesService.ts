@@ -138,6 +138,8 @@ export const codesService = {
     // Real API implementation
     const response = await codesApiClient.get<CodesListResponse>('/api/codes', { params });
     return response.data;
+  },
+
   // Delete a code
   deleteCode: async (codeId: string): Promise<DeleteCodeResponse> => {
     if (USE_MOCK) {
@@ -169,8 +171,8 @@ export const codesService = {
     // Real API implementation
     const response = await codesApiClient.delete<DeleteCodeResponse>(`/api/codes/${codeId}`);
     return response.data;
-  },// const response = await apiClient.delete<DeleteCodeResponse>(`/codes/${codeId}`);
-    // return response.data;
+  },
+
   // Update all codes status now
   updateNow: async (): Promise<UpdateNowResponse> => {
     if (USE_MOCK) {
@@ -205,8 +207,6 @@ export const codesService = {
     // Real API implementation
     const response = await codesApiClient.post<UpdateNowResponse>('/api/codes/update-now');
     return response.data;
-  },// const response = await apiClient.post<UpdateNowResponse>('/codes/update-now');
-    // return response.data;
   },
 
   // Get single code details
