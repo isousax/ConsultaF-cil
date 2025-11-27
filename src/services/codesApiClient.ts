@@ -52,7 +52,7 @@ codesApiClient.interceptors.response.use(
 
         try {
           // Try to refresh the token using the auth API
-          const response = await axios.post(`${AUTH_API_BASE_URL}/api/refresh`, {
+          const response = await axios.post(`${AUTH_API_BASE_URL}/auth/refresh`, {
             refresh_token: refreshToken,
           });
 
