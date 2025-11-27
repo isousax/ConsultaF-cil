@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { X, Calendar, User, MapPin, FileText, Hash, Loader2 } from 'lucide-react';
 import { codesService } from '../../services/codesService';
 import type { CodeDetails } from '../../types';
 import { Card } from '../ui/Card';
-import { clsx } from 'clsx';
 
 interface CodeDetailsModalProps {
   isOpen: boolean;
@@ -17,13 +16,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isOpen && codeId) {
-      loadDetails();
-    }
-  }, [isOpen, codeId]);
-
-  const loadDetails = async () => {
+  const loadDetails = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -35,7 +28,13 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [codeId]);
+
+  useEffect(() => {
+    if (isOpen && codeId) {
+      loadDetails();
+    }
+  }, [isOpen, codeId, loadDetails]);
 
   if (!isOpen) return null;
 
@@ -48,7 +47,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
       
       <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-4 rounded-t-2xl">
+        <div className="sticky top-0 bg-linear-to-r from-blue-600 to-blue-700 text-white px-6 py-4 rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold">Detalhes da Consulta</h2>
@@ -87,7 +86,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
           ) : details ? (
             <div className="space-y-4">
               {/* Paciente */}
-              <Card className="bg-gradient-to-br from-blue-50 to-blue-100/50 border-blue-200">
+              <Card className="bg-linear-to-br from-blue-50 to-blue-100/50 border-blue-200">
                 <div className="flex items-start gap-3">
                   <div className="p-2 bg-blue-600 rounded-lg">
                     <User className="h-5 w-5 text-white" />
@@ -96,7 +95,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
                     <p className="text-xs font-medium text-blue-700 uppercase tracking-wider mb-1">
                       Paciente
                     </p>
-                    <p className="text-lg font-bold text-gray-900 break-words">
+                    <p className="text-lg font-bold text-gray-900 wrap-break-word">
                       {details.patientName}
                     </p>
                   </div>
@@ -104,7 +103,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
               </Card>
 
               {/* Procedimento */}
-              <Card className="bg-gradient-to-br from-purple-50 to-purple-100/50 border-purple-200">
+              <Card className="bg-linear-to-br from-purple-50 to-purple-100/50 border-purple-200">
                 <div className="flex items-start gap-3">
                   <div className="p-2 bg-purple-600 rounded-lg">
                     <FileText className="h-5 w-5 text-white" />
@@ -113,7 +112,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
                     <p className="text-xs font-medium text-purple-700 uppercase tracking-wider mb-1">
                       Procedimento
                     </p>
-                    <p className="text-base font-semibold text-gray-900 break-words">
+                    <p className="text-base font-semibold text-gray-900 wrap-break-word">
                       {details.procedure}
                     </p>
                   </div>
@@ -122,7 +121,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
 
               {/* Datas */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Card className="bg-gradient-to-br from-green-50 to-green-100/50 border-green-200">
+                <Card className="bg-linear-to-br from-green-50 to-green-100/50 border-green-200">
                   <div className="flex items-start gap-3">
                     <div className="p-2 bg-green-600 rounded-lg">
                       <Calendar className="h-5 w-5 text-white" />
@@ -138,7 +137,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
                   </div>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-orange-50 to-orange-100/50 border-orange-200">
+                <Card className="bg-linear-to-br from-orange-50 to-orange-100/50 border-orange-200">
                   <div className="flex items-start gap-3">
                     <div className="p-2 bg-orange-600 rounded-lg">
                       <Calendar className="h-5 w-5 text-white" />
@@ -156,7 +155,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
               </div>
 
               {/* Locais */}
-              <Card className="bg-gradient-to-br from-gray-50 to-gray-100/50 border-gray-200">
+              <Card className="bg-linear-to-br from-gray-50 to-gray-100/50 border-gray-200">
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <div className="p-2 bg-gray-600 rounded-lg">
@@ -166,7 +165,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
                       <p className="text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">
                         Unidade Solicitante
                       </p>
-                      <p className="text-base font-semibold text-gray-900 break-words">
+                      <p className="text-base font-semibold text-gray-900 wrap-break-word">
                         {details.requestingUnit}
                       </p>
                     </div>
@@ -182,7 +181,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
                       <p className="text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">
                         Local de Atendimento
                       </p>
-                      <p className="text-base font-semibold text-gray-900 break-words">
+                      <p className="text-base font-semibold text-gray-900 wrap-break-word">
                         {details.serviceLocation}
                       </p>
                     </div>
@@ -191,7 +190,7 @@ export const CodeDetailsModal = ({ isOpen, onClose, codeId, codeNumber }: CodeDe
               </Card>
 
               {/* ID Interno */}
-              <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100/50 border-indigo-200">
+              <Card className="bg-linear-to-br from-indigo-50 to-indigo-100/50 border-indigo-200">
                 <div className="flex items-start gap-3">
                   <div className="p-2 bg-indigo-600 rounded-lg">
                     <Hash className="h-5 w-5 text-white" />

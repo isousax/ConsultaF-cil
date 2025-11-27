@@ -32,6 +32,7 @@ export const CodesPage = () => {
     setSelectedStatus,
     clearError,
   } = useCodesStore();
+
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCode, setSelectedCode] = useState<Code | null>(null);
@@ -50,7 +51,6 @@ export const CodesPage = () => {
     setIsModalOpen(false);
     setSelectedCode(null);
   };
-  }, [loadCodes]);
 
   const handleUpdateNow = async () => {
     try {
@@ -190,77 +190,77 @@ export const CodesPage = () => {
           </>
         ) : filteredCodes.length === 0 ? (
           <div className="p-12 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-2xl flex items-center justify-center">
-                <Search className="h-8 w-8 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Nenhum código encontrado
-              </h3>
-              <p className="text-gray-500 max-w-sm mx-auto">
-                {searchTerm || selectedStatus !== 'all' 
-                  ? 'Tente alterar os filtros ou termos de busca.' 
-                  : 'Comece adicionando seu primeiro código de consulta.'
-                }
-              </p>
+            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-2xl flex items-center justify-center">
+              <Search className="h-8 w-8 text-gray-400" />
             </div>
-          ) : (
-            <>
-              {/* Versão Mobile - Cards */}
-              <div className="lg:hidden divide-y divide-gray-200">
-                {filteredCodes.map((code) => (
-                  <div key={code.id} className="p-4 hover:bg-blue-50/30 transition-colors">
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      <div className="flex-1 min-w-0 overflow-hidden">
-                    <div className="space-y-1.5 text-xs text-gray-500 mb-3">
-                      <div className="flex items-center justify-between">
-                        <span>Última atualização:</span>
-                        <span className="font-medium">{formatDate(code.lastUpdated)}</span>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Nenhum código encontrado
+            </h3>
+            <p className="text-gray-500 max-w-sm mx-auto">
+              {searchTerm || selectedStatus !== 'all' 
+                ? 'Tente alterar os filtros ou termos de busca.' 
+                : 'Comece adicionando seu primeiro código de consulta.'
+              }
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Versão Mobile - Cards */}
+            <div className="lg:hidden divide-y divide-gray-200">
+              {filteredCodes.map((code) => (
+                <div key={code.id} className="p-4 hover:bg-blue-50/30 transition-colors">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="flex-1 min-w-0 overflow-hidden">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full shrink-0"></div>
+                        <span className="font-mono font-semibold text-gray-900 text-sm break-all">
+                          {code.code}
+                        </span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span>Criado em:</span>
-                        <span className="font-medium">{formatDate(code.createdAt)}</span>
-                      </div>
+                      <p className="text-sm text-gray-600 break-words line-clamp-2">
+                        {code.name || <span className="italic text-gray-400">Sem descrição</span>}
+                      </p>
                     </div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => handleViewDetails(code)}
-                        className="flex-1"
-                      >
-                        <Eye className="h-4 w-4 mr-2" />
-                        Ver Detalhes
-                      </Button>
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => handleDelete(code)}
-                        isLoading={deletingId === code.id}
-                        disabled={deletingId === code.id}
-                        className="bg-linear-to-r from-red-600 to-red-700 shadow-lg shadow-red-500/25"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                    <Badge status={code.status} className="shrink-0" />
+                  </div>
+                  <div className="space-y-1.5 text-xs text-gray-500 mb-3">
+                    <div className="flex items-center justify-between">
+                      <span>Última atualização:</span>
+                      <span className="font-medium">{formatDate(code.lastUpdated)}</span>
                     </div>
+                    <div className="flex items-center justify-between">
+                      <span>Criado em:</span>
+                      <span className="font-medium">{formatDate(code.createdAt)}</span>
                     </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => handleViewDetails(code)}
+                      className="flex-1"
+                    >
+                      <Eye className="h-4 w-4 mr-2" />
+                      Ver Detalhes
+                    </Button>
                     <Button
                       variant="danger"
                       size="sm"
                       onClick={() => handleDelete(code)}
                       isLoading={deletingId === code.id}
                       disabled={deletingId === code.id}
-                      className="bg-linear-to-r from-red-600 to-red-700 shadow-lg shadow-red-500/25 w-full"
+                      className="bg-linear-to-r from-red-600 to-red-700 shadow-lg shadow-red-500/25"
                     >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Remover
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
+            </div>
 
-              {/* Versão Desktop - Tabela */}
-              <div className="hidden lg:block overflow-x-auto">
-                <table className="w-full">
+            {/* Versão Desktop - Tabela */}
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="w-full">
                 <thead className="bg-linear-to-r from-gray-50 to-gray-100/50 border-b border-gray-200">
                   <tr>
                     <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
@@ -291,6 +291,28 @@ export const CodesPage = () => {
                     >
                       <td className="whitespace-nowrap px-6 py-4">
                         <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          <span className="font-mono font-semibold text-gray-900">
+                            {code.code}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-900">
+                          {code.name || (
+                            <span className="italic text-gray-400">Sem descrição</span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <Badge status={code.status} />
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
+                        {formatDate(code.lastUpdated)}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                        {formatDate(code.createdAt)}
+                      </td>
                       <td className="whitespace-nowrap px-6 py-4 text-right">
                         <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                           <Button
@@ -311,7 +333,14 @@ export const CodesPage = () => {
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
-          )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </Card>
 
       {/* Modal de Detalhes */}
@@ -323,35 +352,6 @@ export const CodesPage = () => {
           codeNumber={selectedCode.code}
         />
       )}
-    </div>
-  );
-};                      {formatDate(code.lastUpdated)}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                        {formatDate(code.createdAt)}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-right">
-                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                          <Button
-                            variant="danger"
-                            size="sm"
-                            onClick={() => handleDelete(code)}
-                            isLoading={deletingId === code.id}
-                            disabled={deletingId === code.id}
-                            className="bg-linear-to-r from-red-600 to-red-700 shadow-lg shadow-red-500/25"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              </div>
-            </>
-          )}
-      </Card>
     </div>
   );
 };
