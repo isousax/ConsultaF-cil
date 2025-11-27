@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 const CODES_API_BASE_URL = 'https://consultafacil-codes.pixelaria.com.br';
-const AUTH_API_BASE_URL = 'https://auth.pixelaria.com.br';
+const AUTH_API_BASE_URL = 'https://cfauth.pixelaria.com.br';
 
 // Flag to prevent multiple refresh attempts
 let isRefreshing = false;
