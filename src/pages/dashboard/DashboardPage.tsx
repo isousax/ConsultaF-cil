@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useCodesStore } from '../../stores/codesStore';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Alert } from '../../components/ui/Alert';
 import { Card } from '../../components/ui/Card';
-import { Plus, Smartphone  } from 'lucide-react';
+import { Plus, Smartphone, MapPin, X  } from 'lucide-react';
 import { SEO } from '../../components/SEO';
 import { SEO_CONFIG } from '../../config/seo';
 
@@ -17,6 +17,20 @@ export const DashboardPage = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [invalidCodes, setInvalidCodes] = useState<string[]>([]);
+  const [showLocationNotice, setShowLocationNotice] = useState(false);
+
+  useEffect(() => {
+    // Verifica se é o primeiro acesso
+    const hasSeenNotice = localStorage.getItem('location_notice_seen');
+    if (!hasSeenNotice) {
+      setShowLocationNotice(true);
+    }
+  }, []);
+
+  const handleCloseNotice = () => {
+    localStorage.setItem('location_notice_seen', 'true');
+    setShowLocationNotice(false);
+  };
 
   const handleSingleCodeSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -61,6 +75,47 @@ export const DashboardPage = () => {
         keywords={SEO_CONFIG.dashboard.keywords}
       />
       <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
+        {/* Aviso de Localidade */}
+        {showLocationNotice && (
+          <Card className="bg-blue-50 border-blue-200">
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600 shrink-0">
+                <MapPin className="h-5 w-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="text-base font-semibold text-blue-900">
+                    Cobertura Atual: Jaboatão dos Guararapes
+                  </h3>
+                  <button
+                    onClick={handleCloseNotice}
+                    className="text-blue-600 hover:text-blue-800 transition-colors shrink-0"
+                    aria-label="Fechar aviso"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+                <p className="text-sm text-blue-800 mt-2">
+                  Atualmente, nosso sistema está disponível apenas para consultas de <strong>Jaboatão dos Guararapes - PE</strong>.
+                </p>
+                <p className="text-sm text-blue-700 mt-2">
+                  Quer que adicionemos sua cidade? Entre em contato conosco! Só recebemos pedidos para criar para Jaboatão, mas podemos expandir para outras localidades mediante solicitação.
+                </p>
+                <div className="mt-3">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={handleCloseNotice}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Entendi
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
+        )}
+
         {/* Header */}
         <div>
           <div className="flex items-center gap-3 mb-2">
