@@ -23,7 +23,7 @@ export interface RegisterRequest {
 export interface LoginRequest {
   email: string;
   password: string;
-  remember_me?: boolean;
+  remember?: boolean;
 }
 
 export interface LoginResponse {
@@ -31,7 +31,7 @@ export interface LoginResponse {
   refresh_token: string;
   token_type: string;
   expires_in: number; // segundos
-  remember_me: boolean;
+  remember: boolean;
   user: {
     id: string;
     email: string;

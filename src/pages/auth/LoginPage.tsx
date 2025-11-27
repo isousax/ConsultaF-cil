@@ -14,7 +14,7 @@ export const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    remember_me: false,
+    remember: false,
   });
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -108,9 +108,9 @@ export const LoginPage = () => {
             <label className="flex items-center">
               <input
                 type="checkbox"
-                checked={formData.remember_me}
+                checked={formData.remember}
                 onChange={(e) =>
-                  setFormData({ ...formData, remember_me: e.target.checked })
+                  setFormData({ ...formData, remember: e.target.checked })
                 }
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />

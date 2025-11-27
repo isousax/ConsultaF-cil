@@ -9,8 +9,6 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated, isLoading } = useAuthStore();
 
-  console.log('[PROTECTED_ROUTE] Check:', { isAuthenticated, isLoading });
-
   // Wait for auth to be loaded before redirecting
   if (isLoading) {
     return (
@@ -24,10 +22,8 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   }
 
   if (!isAuthenticated) {
-    console.log('[PROTECTED_ROUTE] Not authenticated, redirecting to login');
     return <Navigate to="/login" replace />;
   }
 
-  console.log('[PROTECTED_ROUTE] Authenticated, rendering children');
   return <>{children}</>;
 };
