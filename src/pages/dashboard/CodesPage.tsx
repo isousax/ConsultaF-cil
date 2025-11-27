@@ -12,10 +12,14 @@ import { clsx } from 'clsx';
 
 const statusOptions: Array<{ value: CodeStatus | 'all'; label: string; count: number }> = [
   { value: 'all', label: 'Todos', count: 0 },
+  { value: 'confirmed', label: 'Autorizada', count: 0 },
   { value: 'pending', label: 'Pendente', count: 0 },
-  { value: 'confirmed', label: 'Confirmado', count: 0 },
+  { value: 'cancelled', label: 'Cancelada', count: 0 },
+  { value: 'rejected', label: 'Rejeitada', count: 0 },
+  { value: 'denied', label: 'Negada', count: 0 },
+  { value: 'expired', label: 'Expirada', count: 0 },
+  { value: 'not_found', label: 'Não Encontrada', count: 0 },
   { value: 'error', label: 'Erro', count: 0 },
-  { value: 'not_found', label: 'Não Encontrado', count: 0 },
 ];
 
 export const CodesPage = () => {

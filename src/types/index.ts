@@ -96,7 +96,7 @@ export type SignupRequest = RegisterRequest;
 export type AuthResponse = LoginResponse;
 
 // Types for Codes
-export type CodeStatus = 'pending' | 'confirmed' | 'error' | 'not_found';
+export type CodeStatus = 'pending' | 'confirmed' | 'cancelled' | 'rejected' | 'denied' | 'expired' | 'not_found' | 'error';
 
 export interface Code {
   id: string;
