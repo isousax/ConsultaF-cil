@@ -16,7 +16,6 @@ export function EmailSentPage() {
   const [resendError, setResendError] = useState('');
   const [resendSuccess, setResendSuccess] = useState(false);
   const [cooldown, setCooldown] = useState(0);
-  const [retryAfter, setRetryAfter] = useState<number | null>(null);
 
   // Countdown timer
   useEffect(() => {
@@ -40,25 +39,40 @@ export function EmailSentPage() {
       // Use retry_after from response, or default to 60s
       const cooldownTime = response.retry_after || 60;
       setCooldown(cooldownTime);
-      setRetryAfter(cooldownTime);
-    } catch (err: any) {
-      const errorMsg = handleApiError(err);
-      setResendError(errorMsg);
-
-      // Check for Retry-After header in error response
-      if (err?.response?.headers?.['retry-after']) {
-        const retrySeconds = parseInt(err.response.headers['retry-after'], 10);
-        if (!isNaN(retrySeconds)) {
-          setCooldown(retrySeconds);
-          setRetryAfter(retrySeconds);
+    } catch (err: unknown) {
+      const error = err as { response?: { status?: number; headers?: Record<string, string>; data?: { retry_after?: number } } };
+      
+      // Check if it's a 429 (Too Many Requests) error
+      if (error?.response?.status === 429) {
+        // Extract retry_after from response
+        let retrySeconds = 60; // default
+        
+        if (error?.response?.headers?.['retry-after']) {
+          retrySeconds = parseInt(error.response.headers['retry-after'], 10);
+        } else if (error?.response?.data?.retry_after) {
+          retrySeconds = error.response.data.retry_after;
         }
-      } else if (err?.response?.data?.retry_after) {
-        const retrySeconds = err.response.data.retry_after;
+        
         setCooldown(retrySeconds);
-        setRetryAfter(retrySeconds);
+        setResendError(`Muitas tentativas. Por favor, aguarde ${retrySeconds} segundos antes de tentar novamente.`);
       } else {
-        // Default cooldown on error
-        setCooldown(60);
+        // Other errors
+        const errorMsg = handleApiError(err);
+        setResendError(errorMsg);
+
+        // Check for Retry-After in other error responses
+        if (error?.response?.headers?.['retry-after']) {
+          const retrySeconds = parseInt(error.response.headers['retry-after'], 10);
+          if (!isNaN(retrySeconds)) {
+            setCooldown(retrySeconds);
+          }
+        } else if (error?.response?.data?.retry_after) {
+          const retrySeconds = error.response.data.retry_after;
+          setCooldown(retrySeconds);
+        } else {
+          // Default cooldown on error
+          setCooldown(60);
+        }
       }
     } finally {
       setIsResending(false);
@@ -201,7 +215,7 @@ export function EmailSentPage() {
               <li>• Verifique sua pasta de spam ou lixo eletrônico</li>
               <li>• Confirme se o e-mail está correto</li>
               <li>• Aguarde alguns minutos e tente novamente</li>
-              <li>• Há um intervalo de {retryAfter || 60} segundos entre cada envio</li>
+              <li>• Há um intervalo de 60 segundos entre cada envio</li>
             </ul>
           </div>
         </div>
